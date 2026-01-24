@@ -2,53 +2,19 @@
 
 This directory contains scripts to install and configure all necessary components for setting up a Kubernetes cluster using kubeadm on different Linux distributions.
 
-## Scripts
+### Scripts
 
 ### Ubuntu Installation (`ubuntu.sh`)
 Automated script to install kubeadm, kubelet, kubectl, and containerd on Ubuntu systems.
 
-**Features:**
-- System package updates
-- Swap configuration (required for Kubernetes)
-- Kernel modules and sysctl parameters setup
-- Container runtime (containerd) installation and configuration
-- Kubernetes repository setup and component installation
-- Firewall configuration (UFW)
-- Bash completion for kubectl
-- Installation verification
-
-**Usage:**
-```bash
-sudo ./ubuntu.sh
-```
-
-**Requirements:**
-- Ubuntu 18.04 or later
-- Root privileges
-- Internet connection
-
 ### Rocky Linux Installation (`rockylinux.sh`)
 Automated script to install kubeadm, kubelet, kubectl, and containerd on Rocky Linux systems.
 
-**Features:**
-- System package updates
-- Swap configuration (required for Kubernetes)
-- Kernel modules and sysctl parameters setup
-- Container runtime (containerd) installation and configuration
-- Kubernetes repository setup and component installation
-- Firewall configuration (firewalld)
-- Bash completion for kubectl
-- Installation verification
+### CNI Setup (`setup-flannel.sh`)
+Automated script to install Flannel CNI plugin after cluster initialization.
 
-**Usage:**
-```bash
-sudo ./rockylinux.sh
-```
-
-**Requirements:**
-- Rocky Linux 8 or later
-- Root privileges
-- Internet connection
+### Cleanup (`cleanup.sh`)
+Universal script to completely remove Kubernetes components from any Linux distribution.
 
 ## What Gets Installed
 
@@ -63,28 +29,33 @@ sudo ./rockylinux.sh
 - **kubernetes-cni**: Container Networking Interface plugins
 - **bash-completion**: Command completion support
 
-## Post-Installation Steps
+**Post-Installation Steps**
 
 After running the appropriate script for your system:
 
-1. **Initialize the cluster (on master node):**
+1. **Pull required images (recommended to avoid rate limiting):**
+   ```bash
+   sudo kubeadm config images pull
+   ```
+
+2. **Initialize the cluster (on master node):**
    ```bash
    sudo kubeadm init --pod-network-cidr=10.244.0.0/16
    ```
 
-2. **Configure kubectl for regular user:**
+3. **Configure kubectl for regular user:**
    ```bash
    mkdir -p $HOME/.kube
    sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
    sudo chown $(id -u):$(id -g) $HOME/.kube/config
    ```
 
-3. **Install a CNI plugin (example with Flannel):**
+4. **Install a CNI plugin (example with Flannel):**
    ```bash
    kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml
    ```
 
-4. **Join worker nodes:**
+5. **Join worker nodes:**
    Use the `kubeadm join` command provided after cluster initialization on each worker node.
 
 ## Network Ports

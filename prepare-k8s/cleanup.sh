@@ -168,6 +168,11 @@ ip link delete cni0 2>/dev/null || true
 ip link delete flannel.1 2>/dev/null || true
 ip link delete weave-net 2>/dev/null || true
 
+# Remove Flannel namespace and resources
+print_status "Removing Flannel CNI resources..."
+kubectl delete namespace kube-flannel 2>/dev/null || true
+kubectl delete -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml 2>/dev/null || true
+
 # Remove remaining Kubernetes processes
 print_status "Terminating remaining Kubernetes processes..."
 pkill -f kubelet 2>/dev/null || true
