@@ -143,4 +143,4 @@ For issues related to:
 
 ## Kubernetes Version
 
-The scripts install Kubernetes v1.29.x (stable). To use a different version, modify the repository URLs in the scripts accordingly.
+The scripts install Kubernetes v1.35.x (latest stable). To use a different version, modify the repository URLs in the scripts accordingly.
