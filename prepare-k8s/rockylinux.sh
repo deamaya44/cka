@@ -65,9 +65,21 @@ EOF
 
 sysctl --system
 
+# Configure hostname resolution
+print_status "Configuring hostname resolution..."
+CURRENT_HOSTNAME=$(hostname)
+IP_ADDRESS=$(hostname -I | awk '{print $1}')
+
+# Add hostname to /etc/hosts if not already present
+if ! grep -q "$CURRENT_HOSTNAME" /etc/hosts; then
+    echo "$IP_ADDRESS $CURRENT_HOSTNAME" >> /etc/hosts
+    print_status "Added $CURRENT_HOSTNAME to /etc/hosts"
+fi
+
 # Install container runtime (containerd)
 print_status "Installing containerd..."
-dnf install -y containerd
+dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+dnf install -y containerd.io
 
 # Create containerd configuration
 print_status "Configuring containerd..."
