@@ -551,6 +551,7 @@ kubectl delete pods --all -n kube-system
 
 ---
 
+## PARTE 9: Tabla Comparativa de CNI Plugins
 
 | Característica | Flannel | Calico | Weave Net | Cilium |
 |---|---|---|---|---|
@@ -587,4 +588,4 @@ Es el rango de IPs para todos los Pods del clúster. Debe ser lo suficientemente
 
 ---
 
-*Guía generada basada en la presentación CNI_Kubernetes.pptx — Claude, Febrero 2026*
+*Guía teórica para el módulo 1.3 del Syllabus CKA 2026*
