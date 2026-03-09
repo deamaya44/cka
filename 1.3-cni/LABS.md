@@ -98,42 +98,27 @@ kubectl delete -f manifests/iperf-test.yaml
 ```
 
 ### Lab 3: Network Policies (solo Calico)
-
-**⚠️ BUG CONOCIDO:** NetworkPolicies con podSelector pueden fallar entre nodos diferentes en Calico. Si el lab falla, usar los manifests alternativos.
-
 ```bash
-# Opción 1: Test normal (puede fallar entre nodos)
+# Crear pods
 kubectl apply -f manifests/policy-test-pods.yaml
 kubectl wait --for=condition=Ready pod/web pod/client -n policy-test
 
-# Opción 2: Si falla, usar pods en mismo nodo
-# kubectl apply -f manifests/policy-test-same-node.yaml
-# kubectl wait --for=condition=Ready pod/web-same-node pod/client-same-node -n policy-test
-
 # Test sin políticas
 WEB_IP=$(kubectl get pod web -n policy-test -o jsonpath='{.status.podIP}')
-kubectl exec -n policy-test client -- wget -qO- --timeout=5 $WEB_IP | head -3
+kubectl run test-curl --image=curlimages/curl -n policy-test --rm -i --restart=Never -- curl -s $WEB_IP | head -3
 
 # Aplicar deny
 kubectl apply -f manifests/deny-policy.yaml
-kubectl exec -n policy-test client -- wget -qO- --timeout=5 $WEB_IP || echo "BLOQUEADO"
+kubectl run test-curl --image=curlimages/curl -n policy-test --rm -i --restart=Never -- curl -s --connect-timeout 3 $WEB_IP || echo "BLOQUEADO"
 
-# Aplicar allow (versión con namespaceSelector)
+# Aplicar allow
 kubectl apply -f manifests/allow-policy.yaml
 kubectl delete -f manifests/deny-policy.yaml
-kubectl exec -n policy-test client -- wget -qO- --timeout=5 $WEB_IP | head -3
-
-# Si sigue fallando, probar versión simple:
-# kubectl apply -f manifests/allow-policy-simple.yaml
+kubectl run test-curl --image=curlimages/curl -n policy-test --rm -i --restart=Never -- curl -s $WEB_IP | head -3
 
 # Limpieza
 kubectl delete namespace policy-test
 ```
-
-**Troubleshooting:**
-- Si falla entre nodos: usar `policy-test-same-node.yaml`
-- Si namespaceSelector falla: usar `allow-policy-simple.yaml`
-- Verificar que Calico esté funcionando: `kubectl get pods -n calico-system`
 
 ### Lab 4: Troubleshooting
 ```bash
