@@ -4,6 +4,16 @@
 
 Clúster Kubernetes funcional **sin CNI instalado**.
 
+## Manifests Disponibles
+
+Los laboratorios usan archivos YAML en `manifests/`:
+
+- **`iperf-test.yaml`** - Pods para test de rendimiento (Lab 2)
+- **`calico-custom.yaml`** - Configuración Calico con CIDR correcto
+- **`netpol-pods.yaml`** - Namespace y pods para Network Policies (Lab 3)
+- **`netpol-deny.yaml`** - NetworkPolicy que bloquea todo el tráfico (Lab 3)
+- **`netpol-allow.yaml`** - NetworkPolicy que permite tráfico específico (Lab 3)
+
 ---
 
 ## Flannel
