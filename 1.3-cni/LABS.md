@@ -105,16 +105,23 @@ kubectl wait --for=condition=Ready pod/web pod/client -n policy-test
 
 # Test sin políticas
 WEB_IP=$(kubectl get pod web -n policy-test -o jsonpath='{.status.podIP}')
-kubectl run test-curl --image=curlimages/curl -n policy-test --rm -i --restart=Never -- curl -s $WEB_IP | head -3
+kubectl run test1 --image=curlimages/curl -n policy-test --restart=Never -- curl -s $WEB_IP
+kubectl logs test1 -n policy-test | head -3
+kubectl delete pod test1 -n policy-test
 
 # Aplicar deny
 kubectl apply -f manifests/deny-policy.yaml
-kubectl run test-curl --image=curlimages/curl -n policy-test --rm -i --restart=Never -- curl -s --connect-timeout 3 $WEB_IP || echo "BLOQUEADO"
+kubectl run test2 --image=curlimages/curl -n policy-test --restart=Never -- curl -s --connect-timeout 3 $WEB_IP
+kubectl logs test2 -n policy-test || echo "BLOQUEADO"
+kubectl delete pod test2 -n policy-test
 
 # Aplicar allow
 kubectl apply -f manifests/allow-policy.yaml
 kubectl delete -f manifests/deny-policy.yaml
-kubectl run test-curl --image=curlimages/curl -n policy-test --rm -i --restart=Never -- curl -s $WEB_IP | head -3
+sleep 3
+kubectl run test3 --image=curlimages/curl -n policy-test --restart=Never -- curl -s $WEB_IP
+kubectl logs test3 -n policy-test | head -3
+kubectl delete pod test3 -n policy-test
 
 # Limpieza
 kubectl delete namespace policy-test
