@@ -222,7 +222,9 @@ kubectl exec iperf-client -- iperf3 -c $SERVER_IP -t 10
 
 ---
 
-### Lab 3: Probar Network Policies (Calico o Cilium)
+### Lab 3: Probar Network Policies (Calico)
+
+**Nota:** Este lab requiere Calico instalado. Flannel no soporta Network Policies.
 
 ```bash
 # Crear namespace con pods
@@ -230,53 +232,75 @@ kubectl create namespace policy-test
 
 # Crear servidor web
 kubectl run web --image=nginx -n policy-test --labels="app=web"
-kubectl expose pod web --port=80 -n policy-test
 
 # Crear cliente
-kubectl run client --image=busybox -n policy-test -- sleep 3600
+kubectl run client --image=busybox -n policy-test --command -- sleep 3600
 
-# Sin políticas: debe funcionar
-kubectl exec -n policy-test client -- wget -qO- web
+# Esperar a que estén Running
+kubectl wait --for=condition=Ready pod/web -n policy-test --timeout=60s
+kubectl wait --for=condition=Ready pod/client -n policy-test --timeout=60s
 
-# Aplicar deny-all
+# Test 1: Sin políticas (debe funcionar)
+WEB_IP=$(kubectl get pod web -n policy-test -o jsonpath='{.status.podIP}')
+echo "Testing connectivity to $WEB_IP"
+kubectl exec -n policy-test client -- wget -qO- --timeout=5 $WEB_IP | head -3
+
+# Test 2: Aplicar deny-all en el pod web
 kubectl apply -f - <<EOF
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: deny-all
-  namespace: policy-test
-spec:
-  podSelector: {}
-  policyTypes: [Ingress, Egress]
-EOF
-
-# Ahora debe fallar (timeout)
-kubectl exec -n policy-test client -- wget -qO- --timeout=5 web
-
-# Permitir acceso del cliente al web
-kubectl apply -f - <<EOF
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: allow-client-web
+  name: web-deny-all
   namespace: policy-test
 spec:
   podSelector:
     matchLabels:
-      run: web
+      app: web
+  policyTypes:
+  - Ingress
+EOF
+
+# Ahora debe fallar (timeout)
+kubectl exec -n policy-test client -- wget -qO- --timeout=5 $WEB_IP 2>&1 || echo "BLOQUEADO (esperado)"
+
+# Test 3: Permitir solo tráfico del cliente
+kubectl apply -f - <<EOF
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: web-allow-client
+  namespace: policy-test
+spec:
+  podSelector:
+    matchLabels:
+      app: web
+  policyTypes:
+  - Ingress
   ingress:
   - from:
     - podSelector:
         matchLabels:
           run: client
+    ports:
+    - protocol: TCP
+      port: 80
 EOF
 
-# Ahora debe funcionar de nuevo
-kubectl exec -n policy-test client -- wget -qO- web
+# Eliminar la política deny-all (solo queremos la allow)
+kubectl delete networkpolicy web-deny-all -n policy-test
+
+# Ahora debe funcionar
+kubectl exec -n policy-test client -- wget -qO- --timeout=5 $WEB_IP | head -3
 
 # Limpieza
 kubectl delete namespace policy-test
 ```
+
+**Conceptos clave:**
+- Una NetworkPolicy con `policyTypes: [Ingress]` sin reglas = deny all
+- Múltiples políticas se combinan con OR (si alguna permite, pasa)
+- `podSelector: {}` aplica a todos los pods del namespace
+- `podSelector: matchLabels` aplica solo a pods con esas labels
 
 ---
 
