@@ -1,4 +1,44 @@
-# 🌐 CNI en Kubernetes — Guía Completa de Estudio e Instalación
+# 1.3 Configuración de Red y CNI
+
+Guías y laboratorios prácticos para instalar y configurar plugins CNI en Kubernetes.
+
+## 📚 Contenido
+
+- **README.md** - Guía teórica completa de CNI (conceptos, arquitectura, comparativas)
+- **LABS.md** - Laboratorios prácticos paso a paso
+
+## 🎯 Laboratorios Disponibles
+
+1. **Verificar flujo CNI completo** - Entender cómo funciona CNI internamente
+2. **Comparar rendimiento** - Benchmark con iperf3 entre diferentes CNIs
+3. **Network Policies básicas** - Implementar políticas de red
+4. **Troubleshooting CNI** - Diagnosticar problemas de red
+5. **Network Policies multi-tier** - Aplicación completa con segmentación
+
+## 🔧 CNIs Cubiertos
+
+- **Flannel** - Overlay VXLAN simple
+- **Calico** - L3 BGP con Network Policies avanzadas
+- **Weave Net** - Mesh network con cifrado
+
+## 🚀 Inicio Rápido
+
+```bash
+# Ver guía teórica
+cat README.md
+
+# Seguir laboratorios prácticos
+cat LABS.md
+```
+
+## 📚 Recursos
+
+- [Documentación CNI oficial](https://www.cni.dev/)
+- [Syllabus CKA - Módulo 1.3](https://cka.amxops.com)
+
+---
+
+**Parte del módulo 1.3 del Syllabus CKA 2026**
 
 ---
 

@@ -1,33 +1,71 @@
-# Kubernetes Cluster Preparation Scripts
+# 1.2 Instalación con Kubeadm
 
-This directory contains scripts to install and configure all necessary components for setting up a Kubernetes cluster using kubeadm on different Linux distributions.
+Scripts automatizados para instalar y configurar un clúster Kubernetes usando kubeadm.
 
-### Scripts
+## 📋 Scripts Disponibles
 
-### Ubuntu Installation (`ubuntu.sh`)
-Automated script to install kubeadm, kubelet, kubectl, and containerd on Ubuntu systems.
+### `ubuntu.sh`
+Instalación completa en Ubuntu (20.04+)
+- containerd como container runtime
+- kubeadm, kubelet, kubectl v1.30+
+- Configuración de kernel y sysctl
 
-### Rocky Linux Installation (`rockylinux.sh`)
-Automated script to install kubeadm, kubelet, kubectl, and containerd on Rocky Linux systems.
+### `rockylinux.sh`
+Instalación completa en Rocky Linux (8+)
+- containerd como container runtime
+- kubeadm, kubelet, kubectl v1.30+
+- Configuración de kernel y sysctl
 
-### CNI Setup (`setup-flannel.sh`)
-Automated script to install Flannel CNI plugin after cluster initialization.
+### `setup-flannel.sh`
+Instalación de Flannel CNI después de inicializar el clúster
+- Pod CIDR: 10.244.0.0/16
+- VXLAN overlay network
 
-### Cleanup (`cleanup.sh`)
-Universal script to completely remove Kubernetes components from any Linux distribution.
+### `cleanup.sh`
+Limpieza completa de componentes Kubernetes
+- Elimina kubeadm, kubelet, kubectl
+- Limpia configuraciones y datos
+- Universal para cualquier distribución
 
-## What Gets Installed
+## 🚀 Uso Rápido
 
-### Core Components
-- **containerd**: Container runtime for Kubernetes
-- **kubelet**: Node agent that runs on each node
-- **kubeadm**: Tool to bootstrap the cluster
-- **kubectl**: Command line tool for interacting with the cluster
+### Control Plane
 
-### Additional Tools
-- **cri-tools**: Container Runtime Interface tools
-- **kubernetes-cni**: Container Networking Interface plugins
-- **bash-completion**: Command completion support
+```bash
+# 1. Instalar componentes
+sudo bash ubuntu.sh  # o rockylinux.sh
+
+# 2. Inicializar clúster
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16
+
+# 3. Configurar kubectl
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+# 4. Instalar CNI (ver módulo 1.3)
+bash setup-flannel.sh
+```
+
+### Worker Nodes
+
+```bash
+# 1. Instalar componentes
+sudo bash ubuntu.sh  # o rockylinux.sh
+
+# 2. Unirse al clúster (usar token del control plane)
+sudo kubeadm join <IP>:6443 --token <TOKEN> \
+  --discovery-token-ca-cert-hash sha256:<HASH>
+```
+
+## 📚 Recursos
+
+- [Documentación oficial kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/)
+- [Syllabus CKA - Módulo 1.2](https://cka.amxops.com)
+
+---
+
+**Parte del módulo 1.2 del Syllabus CKA 2026**
 
 **Post-Installation Steps**
 
