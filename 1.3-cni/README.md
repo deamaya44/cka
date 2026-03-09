@@ -4,6 +4,13 @@ Guías y laboratorios prácticos para instalar y configurar plugins CNI en Kuber
 
 ## 📚 Contenido
 
+### [TEORIA.md](TEORIA.md)
+Guía teórica completa:
+- Fundamentos de CNI
+- Arquitectura y componentes
+- Pod CIDR y Overlay Networks
+- Comparativa detallada de plugins
+
 ### [LABS.md](LABS.md)
 Laboratorios prácticos paso a paso:
 1. Verificar flujo CNI completo
@@ -11,13 +18,6 @@ Laboratorios prácticos paso a paso:
 3. Network Policies básicas
 4. Troubleshooting CNI
 5. Network Policies multi-tier
-
-### [TEORIA.md](TEORIA.md)
-Guía teórica completa:
-- Fundamentos de CNI
-- Arquitectura y componentes
-- Pod CIDR y Overlay Networks
-- Comparativa detallada de plugins
 
 ## 🔧 CNIs Cubiertos
 
@@ -28,11 +28,11 @@ Guía teórica completa:
 ## 🚀 Inicio Rápido
 
 ```bash
-# Seguir laboratorios prácticos
-cat LABS.md
-
-# Consultar teoría cuando sea necesario
+# Primero revisar teoría
 cat TEORIA.md
+
+# Luego seguir laboratorios prácticos
+cat LABS.md
 ```
 
 ## 📚 Recursos
