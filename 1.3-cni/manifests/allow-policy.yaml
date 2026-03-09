@@ -11,10 +11,7 @@ spec:
   - Ingress
   ingress:
   - from:
-    - namespaceSelector:
-        matchLabels:
-          kubernetes.io/metadata.name: policy-test
-      podSelector:
+    - podSelector:
         matchLabels:
           run: client
     ports:

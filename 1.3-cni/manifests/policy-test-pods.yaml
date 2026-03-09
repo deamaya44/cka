@@ -11,6 +11,8 @@ metadata:
   labels:
     app: web
 spec:
+  nodeSelector:
+    kubernetes.io/hostname: node1
   containers:
   - name: nginx
     image: nginx
@@ -23,6 +25,8 @@ metadata:
   labels:
     run: client
 spec:
+  nodeSelector:
+    kubernetes.io/hostname: node1
   containers:
   - name: busybox
     image: busybox
