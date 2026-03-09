@@ -4,7 +4,7 @@ Fundamentos, arquitectura e instalación de plugins CNI en Kubernetes.
 
 ---
 
-## 📚 PARTE 1: Fundamentos de CNI
+## PARTE 1: Fundamentos de CNI
 
 ### ¿Qué es CNI (Container Network Interface)?
 
@@ -71,7 +71,7 @@ CNI es la herramienta que **implementa** estos requisitos.
 
 ---
 
-## 🛠️ PARTE 2: Prerequisitos del Laboratorio
+## PARTE 2: Prerequisitos del Laboratorio
 
 Antes de instalar cualquier plugin necesitas un clúster Kubernetes funcional **sin CNI instalado**.
 
@@ -154,7 +154,7 @@ minikube start --cni=calico   # o flannel, cilium, etc.
 
 ---
 
-## 🔴 PARTE 3: Instalación de Flannel
+## PARTE 3: Instalación de Flannel
 
 Flannel es el CNI más sencillo. Crea una red overlay VXLAN asignando una subred /24 a cada nodo.
 
@@ -234,7 +234,7 @@ kubectl apply -f kube-flannel.yml
 
 ---
 
-## 🔵 PARTE 4: Instalación de Calico
+## PARTE 4: Instalación de Calico
 
 Calico usa routing L3 con BGP (sin encapsulación) por defecto, ofreciendo mayor rendimiento y Network Policies nativas avanzadas.
 
@@ -381,7 +381,7 @@ spec:
 
 ---
 
-## 🟢 PARTE 5: Instalación de Weave Net
+## PARTE 5: Instalación de Weave Net
 
 Weave crea una mesh network cifrada con auto-discovery entre nodos. Ideal para clústeres edge, IoT o situaciones donde el cifrado automático es prioritario.
 
@@ -456,7 +456,7 @@ weave report           # Informe completo (JSON)
 
 ---
 
-## 🟡 PARTE 6: Bonus — Instalación de Cilium
+## PARTE 6: Bonus — Instalación de Cilium
 
 Aunque la presentación lo menciona como "el futuro", aquí tienes su instalación completa.
 
@@ -516,7 +516,7 @@ kubectl port-forward -n kube-system svc/hubble-ui 12000:80 &
 
 ---
 
-## 🔄 PARTE 7: Cambiar de CNI (Migración)
+## PARTE 7: Cambiar de CNI (Migración)
 
 Si quieres probar todos los plugins en el mismo clúster, debes eliminar el CNI actual antes de instalar uno nuevo.
 
@@ -568,7 +568,7 @@ kubectl delete pods --all -n kube-system
 
 ---
 
-## 🎯 PARTE 10: Preguntas Frecuentes de Examen/Entrevista
+## PARTE 10: Preguntas Frecuentes de Examen/Entrevista
 
 **¿Puede haber dos CNIs instalados a la vez?**
 No de forma simultánea para el mismo clúster. Se puede usar un "meta-plugin" como Multus para adjuntar interfaces adicionales a los Pods, pero solo un CNI primario gestiona la red principal.

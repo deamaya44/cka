@@ -1,6 +1,6 @@
-# 🌐 CNI en Kubernetes - Laboratorios Prácticos
+# CNI en Kubernetes - Laboratorios Prácticos
 
-## 📋 Prerequisitos
+## Prerequisitos
 
 Clúster Kubernetes funcional **sin CNI instalado**.
 
@@ -30,7 +30,7 @@ sudo sysctl --system
 
 ---
 
-## 🔴 Flannel - Instalación y Limpieza
+## Flannel - Instalación y Limpieza
 
 ### Instalación
 
@@ -66,7 +66,7 @@ sudo systemctl restart kubelet
 
 ---
 
-## 🔵 Calico - Instalación y Limpieza
+## Calico - Instalación y Limpieza
 
 ### Instalación (Operador Tigera)
 
@@ -113,7 +113,7 @@ sudo systemctl restart kubelet
 
 ---
 
-## 🟢 Weave Net - Instalación y Limpieza
+## Weave Net - Instalación y Limpieza
 
 ### Instalación
 
@@ -139,7 +139,7 @@ sudo systemctl restart kubelet
 
 ---
 
-## 🧪 Laboratorios Prácticos
+## Laboratorios Prácticos
 
 ### Lab 1: Verificar el flujo CNI completo
 
@@ -372,7 +372,7 @@ kubectl delete namespace app
 
 ---
 
-## 📊 Tabla Comparativa
+## Tabla Comparativa
 
 | CNI | Tipo | Network Policies | Rendimiento | Complejidad |
 |---|---|---|---|---|
@@ -382,7 +382,7 @@ kubectl delete namespace app
 
 ---
 
-## 🎯 Comandos de Troubleshooting
+## Comandos de Troubleshooting
 
 ```bash
 # Ver estado de nodos
