@@ -2,56 +2,63 @@
 
 Collaborative study space for group members preparing together for the Kubernetes Administrator certification. We'll advance collectively and update this repository progressively as we master each topic.
 
-## Our Study Approach
+📍 **Current Progress:** Module 1.3 - Configuración de Red y CNI
 
-This collaborative learning path covers all essential topics for the CKA certification. We'll progress together through each module, sharing knowledge, solving problems collectively, and building our skills as a team.
+## Study Roadmap
 
-## Core Competencies
+Seguimos el [Syllabus Oficial CKA 2026](https://cka.amxops.com) con enfoque práctico y laboratorios hands-on.
 
-### 1. Cluster Architecture, Installation & Configuration
-- Understanding Kubernetes architecture components
-- Installing and configuring Kubernetes clusters
-- Managing cluster nodes and control plane
-- Configuring network components and security
+### ✅ Completado
 
-### 2. Workloads & Scheduling
-- Deploying applications using Deployments, StatefulSets, and DaemonSets
-- Managing pods and container lifecycle
-- Understanding scheduling principles and taints/tolerations
-- Implementing resource limits and requests
+#### 1.1 Arquitectura del Clúster Kubernetes
+- ✓ Control Plane components (API Server, etcd, Scheduler, Controller Manager)
+- ✓ Worker Nodes (kubelet, kube-proxy, container runtime)
+- ✓ Kubernetes API Primitives
 
-### 3. Storage
-- Persistent volumes and storage classes
-- Configuring storage for stateful applications
-- Volume mounting and storage provisioning
-- Backup and restore strategies
+#### 1.2 Instalación con Kubeadm
+- ✓ Preparación de infraestructura
+- ✓ Instalación de container runtime (containerd)
+- ✓ Configuración de kubeadm, kubelet, kubectl
+- ✓ Inicialización del control plane
+- ✓ Unión de worker nodes
 
-### 4. Services & Networking
-- Service types (ClusterIP, NodePort, LoadBalancer)
-- Ingress controllers and routing rules
-- Network policies and security
-- CoreDNS and service discovery
+**Recursos:** `prepare-k8s/` - Scripts de instalación automatizada
 
-### 5. Troubleshooting
-- Cluster component diagnostics
-- Application failure resolution
-- Network connectivity troubleshooting
-- Performance monitoring and optimization
+### 🔄 En Progreso
 
-## Lab Structure
+#### 1.3 Configuración de Red y CNI
+- 🔄 Conceptos CNI (Container Network Interface)
+- 🔄 Instalación de plugins: Calico, Flannel, Weave
+- 🔄 Pod CIDR y overlay networks
+- 🔄 Service networking y kube-proxy
 
-### Environment Setup
-- **prepare-k8s/**: Scripts for cluster preparation
-  - `ubuntu.sh`: Ubuntu cluster setup
-  - `rockylinux.sh`: Rocky Linux cluster setup
-  - `README.md`: Detailed installation guide
+**Recursos:** `1.3-cni/` - Guías y laboratorios de CNI
 
-### Practice Modules
-- **basics/**: Fundamental Kubernetes concepts
-- **networking/**: Network configuration and services
-- **storage/**: Persistent storage management
-- **security/**: RBAC, network policies, and security contexts
-- **troubleshooting/**: Common issues and solutions
+### 📋 Pendiente
+
+#### 1.4 Alta Disponibilidad y etcd
+#### 1.5 TLS y Comunicaciones Seguras
+#### 1.6 Helm y Kustomize
+#### 1.7 CRDs y Operators
+#### 1.8 Upgrade y Mantenimiento
+
+## Estructura del Repositorio
+
+```
+cka/
+├── README.md                    # Este archivo
+├── prepare-k8s/                 # 1.2 - Scripts de instalación
+│   ├── ubuntu.sh
+│   ├── rockylinux.sh
+│   ├── setup-flannel.sh
+│   ├── cleanup.sh
+│   └── README.md
+└── 1.3-cni/                     # 1.3 - CNI y Networking
+    ├── README.md                # Guía completa de CNI
+    ├── flannel/
+    ├── calico/
+    └── weave/
+```
 
 ## Exam Preparation
 
@@ -86,7 +93,22 @@ kubectl get componentstatuses
 # Node management
 kubectl describe node <node-name>
 kubectl cordon <node-name>
-kubectl drain <node-name>
+kubectl drain <node-name> --ignore-daemonsets
+```
+
+### CNI Troubleshooting
+```bash
+# Ver configuración CNI actual
+cat /etc/cni/net.d/*.conflist
+
+# Ver binarios CNI disponibles
+ls /opt/cni/bin/
+
+# Verificar Pods de red
+kubectl get pods -n kube-system -l k8s-app=<cni-name>
+
+# Logs de CNI
+kubectl logs -n kube-system -l k8s-app=calico-node
 ```
 
 ### Resource Management
@@ -102,69 +124,30 @@ kubectl describe pod <pod-name>
 kubectl exec -it <pod-name> -- /bin/bash
 ```
 
-### YAML Templates
-```yaml
-# Basic pod template
-apiVersion: v1
-kind: Pod
-metadata:
-  name: example-pod
-spec:
-  containers:
-  - name: app
-    image: nginx
-    ports:
-    - containerPort: 80
-```
-
 ## Practice Scenarios
 
-### Common Exam Tasks
-- Deploy a multi-tier application
-- Configure persistent storage for a database
-- Implement network policies
-- Troubleshoot failing pods
-- Upgrade cluster components
-- Configure RBAC permissions
+### Module 1.2 - Instalación
+- ✓ Deploy a multi-node cluster with kubeadm
+- ✓ Configure containerd as container runtime
+- ✓ Join worker nodes to control plane
 
-### Time Management Tips
-- Practice speed and accuracy
-- Use aliases and shortcuts
-- Master YAML syntax
-- Understand exam interface
-- Practice with time constraints
+### Module 1.3 - CNI (En Progreso)
+- 🔄 Install and configure Flannel
+- 🔄 Install and configure Calico
+- 🔄 Compare CNI performance
+- 🔄 Implement Network Policies
 
 ## Additional Resources
 
 ### Official Documentation
 - Kubernetes Documentation: kubernetes.io/docs
 - CKA Exam Curriculum: kubernetes.io/certification/cka
+- **Syllabus del Grupo:** https://cka.amxops.com
 
 ### Practice Tools
 - Kubernetes Playground: killercoda.com
 - Online Terminal: katacoda.com
 - Local Clusters: minikube, kind, k3d
-
-## Exam Day Tips
-
-### Before the Exam
-- Verify system requirements
-- Test internet connection
-- Review command references
-- Practice with sample questions
-
-### During the Exam
-- Read questions carefully
-- Use copy-paste for YAML
-- Verify solutions before submitting
-- Manage time effectively
-- Don't skip questions
-
-## Certification Renewal
-
-CKA certification is valid for 2 years. Renewal options include:
-- Passing the current CKA exam
-- Completing approved training courses
 
 ## Contributing to Our Study Repository
 
