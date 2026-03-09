@@ -57,11 +57,19 @@ kubectl get nodes
 # Eliminar Flannel
 kubectl delete -f https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
 
-# Limpiar en CADA NODO
+# Limpiar en CADA NODO (master + workers)
+# Ejecutar en master:
 sudo rm -f /etc/cni/net.d/*
 sudo ip link delete cni0 2>/dev/null || true
 sudo ip link delete flannel.1 2>/dev/null || true
 sudo systemctl restart kubelet
+
+# Ejecutar en cada worker (node1, node2, etc):
+ssh node1 "sudo rm -f /etc/cni/net.d/* && sudo ip link delete cni0 2>/dev/null; sudo ip link delete flannel.1 2>/dev/null; sudo systemctl restart kubelet"
+ssh node2 "sudo rm -f /etc/cni/net.d/* && sudo ip link delete cni0 2>/dev/null; sudo ip link delete flannel.1 2>/dev/null; sudo systemctl restart kubelet"
+
+# Verificar que los nodos vuelven a NotReady
+kubectl get nodes
 ```
 
 ---
@@ -70,15 +78,24 @@ sudo systemctl restart kubelet
 
 ### Instalación (Operador Tigera)
 
+**IMPORTANTE:** Si tu clúster ya fue inicializado con un CIDR diferente (ej: 10.244.0.0/16 para Flannel), debes modificar el custom-resources.yaml antes de aplicarlo.
+
 ```bash
-# Inicializar con CIDR de Calico
+# Opción 1: Clúster nuevo con CIDR de Calico
 sudo kubeadm init --pod-network-cidr=192.168.0.0/16
+
+# Opción 2: Clúster existente - adaptar Calico al CIDR actual
+# Descargar y modificar el manifest
+curl -O https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/custom-resources.yaml
+
+# Editar y cambiar cidr: 192.168.0.0/16 por el CIDR de tu clúster (ej: 10.244.0.0/16)
+# Luego aplicar el archivo modificado
 
 # Instalar operador
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/tigera-operator.yaml
 
-# Aplicar configuración
-kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/custom-resources.yaml
+# Aplicar configuración (usa el archivo modificado si es necesario)
+kubectl create -f custom-resources.yaml
 
 # Monitorear
 watch kubectl get pods -n calico-system
