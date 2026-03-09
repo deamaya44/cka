@@ -551,7 +551,7 @@ kubectl delete pods --all -n kube-system
 
 ---
 
-## PARTE 9: Tabla Comparativa de CNI Plugins
+## PARTE 8: Tabla Comparativa de CNI Plugins
 
 | Característica | Flannel | Calico | Weave Net | Cilium |
 |---|---|---|---|---|
@@ -569,7 +569,7 @@ kubectl delete pods --all -n kube-system
 
 ---
 
-## PARTE 10: Preguntas Frecuentes de Examen/Entrevista
+## PARTE 9: Preguntas Frecuentes de Examen/Entrevista
 
 **¿Puede haber dos CNIs instalados a la vez?**
 No de forma simultánea para el mismo clúster. Se puede usar un "meta-plugin" como Multus para adjuntar interfaces adicionales a los Pods, pero solo un CNI primario gestiona la red principal.
