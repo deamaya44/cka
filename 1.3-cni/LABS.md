@@ -98,6 +98,9 @@ kubectl delete -f manifests/iperf-test.yaml
 ```
 
 ### Lab 3: Network Policies (solo Calico)
+
+**⚠️ NOTA:** NetworkPolicies con podSelector pueden fallar entre nodos diferentes en algunas configuraciones de Calico. Si falla, usar namespaceSelector o asegurar que los pods estén en el mismo nodo.
+
 ```bash
 # Crear pods
 kubectl apply -f manifests/policy-test-pods.yaml
@@ -111,7 +114,7 @@ kubectl exec -n policy-test client -- wget -qO- --timeout=5 $WEB_IP | head -3
 kubectl apply -f manifests/deny-policy.yaml
 kubectl exec -n policy-test client -- wget -qO- --timeout=5 $WEB_IP || echo "BLOQUEADO"
 
-# Aplicar allow
+# Aplicar allow (puede fallar entre nodos - bug conocido)
 kubectl apply -f manifests/allow-policy.yaml
 kubectl delete -f manifests/deny-policy.yaml
 kubectl exec -n policy-test client -- wget -qO- --timeout=5 $WEB_IP | head -3
