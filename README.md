@@ -22,7 +22,7 @@ Seguimos el [Syllabus Oficial CKA 2026](https://cka.amxops.com) con enfoque prá
 - ✓ Inicialización del control plane
 - ✓ Unión de worker nodes
 
-**Recursos:** `prepare-k8s/` - Scripts de instalación automatizada
+**Recursos:** `1.2-instalacion-kubeadm/` - Scripts de instalación automatizada
 
 ### 🔄 En Progreso
 
@@ -46,15 +46,15 @@ Seguimos el [Syllabus Oficial CKA 2026](https://cka.amxops.com) con enfoque prá
 
 ```
 cka/
-├── README.md                    # Este archivo
-├── prepare-k8s/                 # 1.2 - Scripts de instalación
+├── README.md                         # Este archivo
+├── 1.2-instalacion-kubeadm/          # 1.2 - Instalación con Kubeadm
 │   ├── ubuntu.sh
 │   ├── rockylinux.sh
 │   ├── setup-flannel.sh
 │   ├── cleanup.sh
 │   └── README.md
-└── 1.3-cni/                     # 1.3 - CNI y Networking
-    ├── README.md                # Guía completa de CNI
+└── 1.3-cni/                          # 1.3 - CNI y Networking
+    ├── README.md                     # Guía completa de CNI
     ├── flannel/
     ├── calico/
     └── weave/
