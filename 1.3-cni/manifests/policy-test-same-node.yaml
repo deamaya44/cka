@@ -6,11 +6,13 @@ metadata:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: web
+  name: web-same-node
   namespace: policy-test
   labels:
     app: web
 spec:
+  nodeSelector:
+    kubernetes.io/hostname: node1
   containers:
   - name: nginx
     image: nginx
@@ -18,11 +20,13 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: client
+  name: client-same-node
   namespace: policy-test
   labels:
     run: client
 spec:
+  nodeSelector:
+    kubernetes.io/hostname: node1
   containers:
   - name: busybox
     image: busybox
