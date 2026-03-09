@@ -100,7 +100,7 @@ kubectl delete -f manifests/iperf-test.yaml
 ### Lab 3: Network Policies (solo Calico)
 ```bash
 # Crear pods
-kubectl apply -f manifests/policy-test-pods.yaml
+kubectl apply -f manifests/netpol-pods.yaml
 kubectl wait --for=condition=Ready pod/web pod/client -n policy-test
 
 # Test sin políticas
@@ -110,14 +110,14 @@ kubectl logs test1 -n policy-test | head -3
 kubectl delete pod test1 -n policy-test
 
 # Aplicar deny
-kubectl apply -f manifests/deny-policy.yaml
+kubectl apply -f manifests/netpol-deny.yaml
 kubectl run test2 --image=curlimages/curl -n policy-test --restart=Never -- curl -s --connect-timeout 3 $WEB_IP
 kubectl logs test2 -n policy-test || echo "BLOQUEADO"
 kubectl delete pod test2 -n policy-test
 
 # Aplicar allow
-kubectl apply -f manifests/allow-policy.yaml
-kubectl delete -f manifests/deny-policy.yaml
+kubectl apply -f manifests/netpol-allow.yaml
+kubectl delete -f manifests/netpol-deny.yaml
 sleep 3
 kubectl run test3 --image=curlimages/curl -n policy-test --restart=Never -- curl -s $WEB_IP
 kubectl logs test3 -n policy-test | head -3
